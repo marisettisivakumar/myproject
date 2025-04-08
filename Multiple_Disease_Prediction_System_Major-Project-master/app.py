@@ -96,22 +96,41 @@ if selected == 'Heart Disease Prediction':
         else:
             result_card("No Heart Disease", "Maintain a heart-healthy lifestyle.", False)
 
-# Parkinson's Prediction Page
+## Parkinson's Prediction Page
 if selected == "Parkinson's Prediction":
     st.title("Parkinson's Disease Prediction")
     st.subheader("Enter Patient Details:")
     
     cols = st.columns(5)
-    input_features = [
-        'MDVP:Fo(Hz)', 'MDVP:Fhi(Hz)', 'MDVP:Flo(Hz)', 'MDVP:Jitter(%)', 'MDVP:Jitter(Abs)',
-        'MDVP:RAP', 'MDVP:PPQ', 'Jitter:DDP', 'MDVP:Shimmer', 'MDVP:Shimmer(dB)',
-        'Shimmer:APQ3', 'Shimmer:APQ5', 'MDVP:APQ', 'Shimmer:DDA', 'NHR',
-        'HNR', 'RPDE', 'DFA', 'spread1', 'spread2', 'D2', 'PPE'
-    ]
+    input_features = {
+        'MDVP:Fo(Hz)': (88, 260),
+        'MDVP:Fhi(Hz)': (102, 592),
+        'MDVP:Flo(Hz)': (65, 239),
+        'MDVP:Jitter(%)': (0.0016, 0.033),
+        'MDVP:Jitter(Abs)': (0.000007, 0.00026),
+        'MDVP:RAP': (0.00068, 0.0214),
+        'MDVP:PPQ': (0.00092, 0.0195),
+        'Jitter:DDP': (0.00204, 0.0643),
+        'MDVP:Shimmer': (0.00954, 0.119),
+        'MDVP:Shimmer(dB)': (0.085, 1.3),
+        'Shimmer:APQ3': (0.00455, 0.056),
+        'Shimmer:APQ5': (0.0057, 0.079),
+        'MDVP:APQ': (0.00719, 0.137),
+        'Shimmer:DDA': (0.0136, 0.169),
+        'NHR': (0.00065, 0.315),
+        'HNR': (8.44, 33.04),
+        'RPDE': (0.256, 0.685),
+        'DFA': (0.574, 0.825),
+        'spread1': (-7.96, -2.43),
+        'spread2': (0.006, 0.450),
+        'D2': (1.42, 3.67),
+        'PPE': (0.044, 0.527)
+    }
+
     user_inputs = []
-    for i, feature in enumerate(input_features):
+    for i, (feature, (min_val, max_val)) in enumerate(input_features.items()):
         with cols[i % 5]:
-            user_inputs.append(st.slider(feature, 0.0, 5.0, 1.0))
+            user_inputs.append(st.slider(feature, float(min_val), float(max_val), float((min_val + max_val) / 2)))
     
     if st.button("Predict Parkinson's Disease"):
         prediction = parkinsons_model.predict([user_inputs])
